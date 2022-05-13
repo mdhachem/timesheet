@@ -25,7 +25,7 @@ services:
       context: ./
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - "8082:8082"
     networks:
       - timesheet-network
     depends_on:
