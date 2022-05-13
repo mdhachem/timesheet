@@ -1,5 +1,4 @@
 FROM adoptopenjdk/openjdk11:alpine-jre
-VOLUME /tmp
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+EXPOSE 8082
+ADD target/Timesheet-1.0.war Timesheet-1.0.war
+ENTRYPOINT ["java","-jar","/Timesheet-1.0.war"]
