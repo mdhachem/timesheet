@@ -1,26 +1,32 @@
-version: "3"
+version: '3.4'
 services:
-  server:
-    image: pintra/timesheetfinal:$BUILD_NUMBER
+  timesheet:
+    image: pintra/timesheet
+    hostname: timesheet
+    networks:
+      timesheetNetwork:
+        ipv4_address: 172.20.199.3
+    environment:
+      DB_HOST: 172.20.199.2
+    expose:
+      - "8082"
+    restart: on-failure:3
     ports:
       - "8082:8082"
-    environment:
-      - spring.datasource.url=jdbc:mysql://mysqldb:3306/timesheet?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
-      - spring.datasource.username=root
-      - spring.datasource.password=root
-      - spring.jpa.hibernate.ddl-auto=update
-    networks:
-      - springmysql-net
     depends_on:
-      - mysqldb
-
-  mysqldb:
-    image: mysql:5.7
+      - mysql
+  mysql:
+    image: mysql:8.0.28
+    hostname: mysql
     networks:
-      - springmysql-net
+      timesheetNetwork:
+        ipv4_address: 172.20.199.2
     environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=timesheet
-
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: timesheet
 networks:
-  springmysql-net:
+  timesheetNetwork:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.199.1/24
